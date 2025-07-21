@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nuevo YouTube sin Censura</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    header {
+      background: #222;
+      width: 100%; padding: 10px;
+      text-align: center; font-size: 1.8rem;
+      font-weight: bold;
+      user-select: none;
+    }
+    main {
+      max-width: 800px;
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    video {
+      width: 100%;
+      max-height: 450px;
+      background: black;
+      border-radius: 8px;
+    }
+    .video-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .video-item {
+      cursor: pointer;
+      background: #222;
+      padding: 10px;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+    .video-item:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>Nuevo YouTube sin Censura</header>
+  <main>
+    <video id="player" controls>
+      <source src="" type="video/mp4" />
+      Tu navegador no soporta video HTML5.
+    </video>
+    <div class="video-list" id="videoList"></div>
+  </main>
+
+  <script>
+    // Lista simulada de videos sin censura
+    const videos = [
+      {
+        title: "Video 1 - Sin Censura",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        title: "Video 2 - Contenido Libre",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+      },
+      {
+        title: "Video 3 - Expresión Total",
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+      }
+    ];
+
+    const player = document.getElementById('player');
+    const videoList = document.getElementById('videoList');
+
+    // Carga lista de videos en la UI
+    function loadVideos() {
+      videos.forEach((video, i) => {
+        const div = document.createElement('div');
+        div.className = 'video-item';
+        div.textContent = video.title;
+        div.onclick = () => playVideo(i);
+        videoList.appendChild(div);
+      });
+    }
+
+    // Cambia el video en el player
+    function playVideo(index) {
+      player.src = videos[index].url;
+      player.play();
+    }
+
+    // Al iniciar carga el primer video y la lista
+    window.onload = () => {
+      loadVideos();
+      playVideo(0);
+    };
+  </script>
+</body>
+</html>
