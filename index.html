@@ -1,92 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unmuted - Plataforma sin censura</title>
-<style>
-  body {
-    margin: 0; background: #121212; color: #fff; font-family: Arial, sans-serif;
-  }
-  header {
-    position: fixed; top: 0; left: 0; right: 0;
-    height: 56px; background: #202020; display: flex;
-    align-items: center; padding: 0 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.7);
-    z-index: 10;
-  }
-  .upload-button {
-    width: 40px;
-    height: 40px;
-    background: #ff0000;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 16px;
-  }
-  .upload-button:hover {
-    background: #cc0000;
-  }
-  .upload-button svg {
-    fill: white;
-    width: 20px;
-    height: 20px;
-  }
-  .logo {
-    font-weight: bold; font-size: 1.5rem; cursor: pointer;
-    user-select: none;
-  }
-  .search-bar {
-    flex-grow: 1; margin-left: 24px;
-  }
-  .search-bar input {
-    width: 100%; padding: 6px 12px; border-radius: 2px;
-    border: none; font-size: 1rem;
-  }
-  main {
-    padding: 72px 16px 16px; max-width: 1200px; margin: 0 auto;
-  }
-  #player {
-    width: 100%;
-    max-height: 480px;
-    border-radius: 8px;
-    background: black;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unmuted - Plataforma sin censura</title>
+  <style>
+    body {
+      margin: 0;
+      background: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #202020;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+      z-index: 10;
+    }
+    .upload-button {
+      width: 40px;
+      height: 40px;
+      background: #ff0000;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+    .upload-button:hover {
+      background: #cc0000;
+    }
+    .upload-button svg {
+      fill: white;
+      width: 20px;
+      height: 20px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .search-bar {
+      flex-grow: 1;
+      margin-left: 24px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 6px 12px;
+      border-radius: 2px;
+      border: none;
+      font-size: 1rem;
+    }
+    main {
+      padding: 72px 16px 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .upload-message {
+      font-size: 1.1rem;
+      color: #ccc;
+      text-align: center;
+      margin-top: 60px;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <button class="upload-button" title="Subir video" onclick="document.getElementById('uploadInput').click()">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M5 17h14v2H5v-2zm7-12l-5 5h3v4h4v-4h3l-5-5z"/>
-    </svg>
-  </button>
-  <div class="logo">Unmuted</div>
-  <div class="search-bar">
-    <input type="text" placeholder="Buscar videos..." id="searchInput" disabled />
-  </div>
-</header>
+  <header>
+    <button class="upload-button" title="Subir video" onclick="document.getElementById('uploadInput').click()">
+      <svg viewBox="0 0 24 24">
+        <path d="M5 17h14v2H5v-2zm7-12l-5 5h3v4h4v-4h3l-5-5z"/>
+      </svg>
+    </button>
+    <div class="logo">Unmuted</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar videos..." id="searchInput" disabled />
+    </div>
+  </header>
 
-<main>
-  <video id="player" controls></video>
-</main>
+  <main>
+    <div class="upload-message">Haz clic en el botón rojo para subir un video desde tu dispositivo.</div>
+  </main>
 
-<input type="file" id="uploadInput" accept="video/*" style="display:none" />
+  <input type="file" id="uploadInput" accept="video/*" style="display: none" />
 
-<script>
-  const uploadInput = document.getElementById('uploadInput');
-  const player = document.getElementById('player');
+  <script>
+    const uploadInput = document.getElementById('uploadInput');
 
-  uploadInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    uploadInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    const url = URL.createObjectURL(file);
-    player.src = url;
-    player.play();
-  });
-</script>
+      if (!file.type.startsWith('video/')) {
+        alert("Solo se permiten archivos de video.");
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      window.location.href = url; // redirige para mostrar solo el video (provisional)
+    });
+  </script>
 </body>
 </html>
+
