@@ -1,109 +1,171 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nuevo YouTube sin Censura</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #eee;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column; align-items: center;
-    }
-    header {
-      background: #222;
-      width: 100%; padding: 10px;
-      text-align: center; font-size: 1.8rem;
-      font-weight: bold;
-      user-select: none;
-    }
-    main {
-      max-width: 800px;
-      width: 100%;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-    video {
-      width: 100%;
-      max-height: 450px;
-      background: black;
-      border-radius: 8px;
-    }
-    .video-list {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .video-item {
-      cursor: pointer;
-      background: #222;
-      padding: 10px;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-    .video-item:hover {
-      background: #333;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nuevo YouTube sin Censura</title>
+<style>
+  body {
+    margin: 0; background: #121212; color: #fff; font-family: Arial, sans-serif;
+  }
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px; background: #202020; display: flex;
+    align-items: center; padding: 0 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+    z-index: 10;
+  }
+  .logo {
+    font-weight: bold; font-size: 1.5rem; cursor: pointer;
+    user-select: none;
+    margin-right: 24px;
+  }
+  .search-bar {
+    flex-grow: 1;
+  }
+  .search-bar input {
+    width: 100%; padding: 6px 12px; border-radius: 2px;
+    border: none; font-size: 1rem;
+  }
+  main {
+    padding: 72px 16px 16px;
+    display: flex;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  #player-container {
+    flex-basis: 60%;
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  video {
+    width: 100%;
+    border-radius: 8px;
+    background: black;
+  }
+  #video-grid {
+    flex-basis: 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+  }
+  .video-card {
+    cursor: pointer;
+    background: #222;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .video-card:hover {
+    background: #333;
+  }
+  .thumbnail {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+  }
+  .video-title {
+    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #eee;
+  }
+</style>
 </head>
 <body>
-  <header>Nuevo YouTube sin Censura</header>
-  <main>
+<header>
+  <div class="logo" onclick="playVideo(0)">NuevoYouTube</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar videos..." id="searchInput" />
+  </div>
+</header>
+
+<main>
+  <div id="player-container">
     <video id="player" controls>
       <source src="" type="video/mp4" />
       Tu navegador no soporta video HTML5.
     </video>
-    <div class="video-list" id="videoList"></div>
-  </main>
+    <div id="current-title" style="margin-top: 8px; font-weight: bold;"></div>
+  </div>
+  <div id="video-grid"></div>
+</main>
 
-  <script>
-    // Lista simulada de videos sin censura
-    const videos = [
-      {
-        title: "Video 1 - Sin Censura",
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-      },
-      {
-        title: "Video 2 - Contenido Libre",
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-      },
-      {
-        title: "Video 3 - Expresión Total",
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+<script>
+  const videos = [
+    {
+      title: "Big Buck Bunny - Sin Censura",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      thumbnail: "https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217"
+    },
+    {
+      title: "Elephants Dream - Contenido Libre",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      thumbnail: "https://orange.blender.org/wp-content/themes/orange/images/media/gallery/ed_head.jpg"
+    },
+    {
+      title: "Sintel - Expresión Total",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      thumbnail: "https://durian.blender.org/wp-content/uploads/2010/05/sintel_posters_15.jpg"
+    },
+    {
+      title: "Tears of Steel - Libre Expresión",
+      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+      thumbnail: "https://mango.blender.org/wp-content/uploads/2012/03/tears-of-steel-poster.jpg"
+    }
+  ];
+
+  const player = document.getElementById("player");
+  const videoGrid = document.getElementById("video-grid");
+  const currentTitle = document.getElementById("current-title");
+  const searchInput = document.getElementById("searchInput");
+
+  function playVideo(index) {
+    player.src = videos[index].url;
+    currentTitle.textContent = videos[index].title;
+    player.play();
+  }
+
+  function createVideoCard(video, index) {
+    const card = document.createElement("div");
+    card.className = "video-card";
+    card.onclick = () => playVideo(index);
+
+    const thumb = document.createElement("img");
+    thumb.className = "thumbnail";
+    thumb.src = video.thumbnail;
+    thumb.alt = video.title;
+
+    const title = document.createElement("div");
+    title.className = "video-title";
+    title.textContent = video.title;
+
+    card.appendChild(thumb);
+    card.appendChild(title);
+    return card;
+  }
+
+  function loadVideos(filter = "") {
+    videoGrid.innerHTML = "";
+    videos.forEach((video, i) => {
+      if (video.title.toLowerCase().includes(filter.toLowerCase())) {
+        const card = createVideoCard(video, i);
+        videoGrid.appendChild(card);
       }
-    ];
+    });
+  }
 
-    const player = document.getElementById('player');
-    const videoList = document.getElementById('videoList');
+  searchInput.addEventListener("input", () => {
+    loadVideos(searchInput.value);
+  });
 
-    // Carga lista de videos en la UI
-    function loadVideos() {
-      videos.forEach((video, i) => {
-        const div = document.createElement('div');
-        div.className = 'video-item';
-        div.textContent = video.title;
-        div.onclick = () => playVideo(i);
-        videoList.appendChild(div);
-      });
-    }
-
-    // Cambia el video en el player
-    function playVideo(index) {
-      player.src = videos[index].url;
-      player.play();
-    }
-
-    // Al iniciar carga el primer video y la lista
-    window.onload = () => {
-      loadVideos();
-      playVideo(0);
-    };
-  </script>
+  window.onload = () => {
+    loadVideos();
+    playVideo(0);
+  };
+</script>
 </body>
 </html>
